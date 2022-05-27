@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<style>
+  h1 {text-align: center;}
+  h2 {text-align: center;}
+</style> 
+  <title>Model 2</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <!-- Navbar consisiting of 4 links , Home page, Model1, Model2, README -->
+
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Home Page</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/model1">Model 1</a>
+        <a class="nav-link" href="/model2">Model 2</a>
+        <a class="nav-link" href="/README">README</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <!-- form for uploading images submitted by the user-->
+
+<div class="container">
+  <h1 class="jumbotron" style="background-color: #e3f2fd;">Anime Character Recognition Model 2</h1>
+  <br><br>
+  <form class="form-horizontal" action="/submit2" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Upload Your Image :</label>
+      <div class="col-sm-10">          
+        <input type="file" name="my_image" accept="image/png, image/jpg, image/jpeg" class="form-control" placeholder="Hours Studied" id="pwd">
+      </div>
+    </div>
+
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- If file is not .jpg, .png or .jpeg display error message-->
+  {% if bool %}
+    <h3> Please select a valid file type and try again. Supported file types are .jpg, .jpeg and .png</h3>
+  {% endif %}
+  
+  <!-- Displaying the image uploaded by the user-->
+
+  {% if img_path %}
+    <h2 class="jumbotron" style="background-color: #e3f2fd;"> Your Image </h2>
+    <img src="{{img_path}}" height="300px" width="300px">
+    <br/>
+  {% endif %}
+  
+  <!-- Displaying the predicted characters name and link to the character details-->
+  {% if predictions %}
+    <h2 class="jumbotron" style="background-color: #e3f2fd;"> Character name and details </h2>
+    <h2> Click on Character details to get information about the character.</h2>
+    </br>
+    </br>
+    {% for preds in predictions %}
+        <h3>{{preds[1]}}</h3>
+        <a href = {{preds[2]}}  style = "color: blue;" target="_blank" title="Click here">Character Details</a>
+    {% endfor %}
+  {% endif %}
+
+</div>
+</body>
+</html>
