@@ -71,6 +71,7 @@ Link to the web app : https://animenhk.herokuapp.com/
 5. Install all the dependencies using pip install -r requirements.txt in the command line.
 6. type "flask run" in the command line.
 
+I have also given some test images in the folder Test_Images in case you dont have images to test the app.
 ## Working of the web applicaiton
 
 When you run the web application ,there are 2 models (Model1 and Model2) in the navbar.
