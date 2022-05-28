@@ -1,6 +1,4 @@
-from asyncio.windows_events import NULL
 from flask import Flask, redirect, render_template, request
-from matplotlib.pyplot import get
 from sqlalchemy import false, true
 import torchvision.transforms as tt
 from torchvision.datasets import ImageFolder 
@@ -26,28 +24,20 @@ class ResNet34(ImageClassificationBase):
     def forward(self, xb):
         return self.network(xb)
 
-app = Flask(__name__)
+app = Flask(__name__)                                                  ######## Code for running the model on GPU
+                                                                       # Additional requirement: Torch with cuda support must be installed
+device = torch.device('cpu')                                                   #device = torch.device('cuda')
 
-PATH = 'final_maybe.pth'                                # Loading the image classification model onto the gpu
-model = ResNet34(8)
-model.load_state_dict(torch.load(PATH))
-model.eval()
-model.cuda()
-
+PATH = 'final_maybe.pth'                                                       #PATH = 'final_maybe.pth'         
+model = ResNet34(8)                                                            #model = ResNet34(8) 
+model.load_state_dict(torch.load(PATH, map_location='cpu'))                    #model.load_state_dict(torch.load(PATH))
+model.eval()                                                                   #model.cuda()
+                                                                               #model.eval()
 def to_device(data, device):
     """Move tensor(s) to chosen device"""
     if isinstance(data, (list,tuple)):
         return [to_device(x, device) for x in data]
-    return data.to(device, non_blocking=True)
-
-def get_default_device():                                  # Note: A machine with gpu is must for this webapp to work
-    """Pick GPU if available, else CPU"""                  # Pytorch with cuda support must be installed
-    if torch.cuda.is_available():                          # GPU must be supported by pytorch
-        return torch.device('cuda')
-    else:
-        return torch.device('cpu')
-        
-device = get_default_device()           
+    return data.to(device, non_blocking=True)     
 
 def predict_image(img, model):                             # Returns the prediction(name of anime character) from the model
     # Convert to a batch of 1
@@ -203,7 +193,7 @@ def model22():
             return redirect('/model2');
         img_path = "static/Dataset/final/hello/" + img.filename	
         img.save(img_path)
-
+        img.save("static/Dataset/Seperate/" + img.filename)
         type = imghdr.what(img_path)                                    # checking if the file uploaded by the user is a valid image type
         if (type == "png" or type == "jpg" or type == "jpeg"):
             bool = true
