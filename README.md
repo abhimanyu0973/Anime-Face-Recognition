@@ -1,4 +1,4 @@
-# Anime-Face-Recognition'
+# Anime-Face-Recognition
 
 ## Introduction
 
