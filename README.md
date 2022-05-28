@@ -75,7 +75,7 @@ Link to the web app : https://animenhk.herokuapp.com/
 
 When you run the web application ,there are 2 models (Model1 and Model2) in the navbar.
 
-Model 1 seperates all the faces in the image and then gives prediction for each face.
+Model 1 seperates all the faces in the image and then gives prediction for each face along with the character details.
 However, sometimes OpenCV fails to detect any faces and thus no predictions are returned.
 In this case you can manually crop the faces from the image and use model 2.
 
