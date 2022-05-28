@@ -33,7 +33,7 @@ It is a face detector for anime characters using OpenCV which is based on LBP ca
 Now that the faces are sperated we have to get their identity.
 
 ## Anime Character recognition
-For this I decided to train an Image Classification model Trained on the Resnet9 model and then transfer learning using Resnet34 model(pretrained on the Imagenet dataset).
+For this I decided to train an Image Classification model Trained on the Resnet9 model and then transfer learning using Resnet34 model(pretrained on the Imagenet dataset)(neural network).
 I decided to use this as I had previously used it before and the results are quiet satisfying.(Was able to get about 90% accuracy on 8 characters)(on validation dataset).
 
 I trained the model on Google Collab . 
@@ -66,9 +66,21 @@ Link to the web app : https://animenhk.herokuapp.com/
 
 1. Firstly clone the repository
 2. Make a virtual environment in the directory containing all the cloned files.
-3. Activate the virtual environment.
-4. Install all the dependencies using pip install -r requirements.txt in the command line.
-5. type "flask run" in the command line.
+3. The files/folders that must be present in the directory are : app.py, static, templates, "final_maybe.pth", lbpcascade_animeface.xml, requirements.txt and       runtime.txt. I have also put the python version in runtime.txt (python-3.8.10)
+4. Activate the virtual environment.
+5. Install all the dependencies using pip install -r requirements.txt in the command line.
+6. type "flask run" in the command line.
+
+## Working of the web applicaiton
+
+When you run the web application ,there are 2 models (Model1 and Model2) in the navbar.
+
+Model 1 seperates all the faces in the image and then gives prediction for each face.
+However, sometimes OpenCV fails to detect any faces and thus no predictions are returned.
+In this case you can manually crop the faces from the image and use model 2.
+
+Model 2 directly gives the prediction on the image given by the user (doesnt use OpenCV face seperation).
+This is recommended if there is only one character in the image, as the model is not only trained on the face features but overall features of the character.
 
 ### Note
 Currently the model runs on cpu, if you want to use the gpu/cuda you will have to make some changes in app.py (read the comments in app.py for the changes)
@@ -76,5 +88,5 @@ Also you should have torch with cuda installed(your gpu must support torch with 
 
 I hosted my web application with cpu because torch with cuda is large in size and free membership of heroku does not support that size.
 
-
-
+## Finally
+I would try my best to make the app work on more number of characters and with a higher accuracy in the future.
