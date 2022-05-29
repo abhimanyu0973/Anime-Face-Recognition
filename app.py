@@ -8,9 +8,14 @@ from torchvision import models
 import os
 import shutil
 import cv2
+<<<<<<< HEAD
 import imghdr
 
 class ImageClassificationBase(nn.Module):                # Classes for our trained image classification model (Resnet34)
+=======
+
+class ImageClassificationBase(nn.Module):                       # Classes for our trained image classification model (Resnet34)
+>>>>>>> 7d7ab77 (finalCommit)
     pass
 
 class ResNet34(ImageClassificationBase):
@@ -24,7 +29,11 @@ class ResNet34(ImageClassificationBase):
     def forward(self, xb):
         return self.network(xb)
 
+<<<<<<< HEAD
 app = Flask(__name__)                                                  ######## Code for running the model on GPU
+=======
+app = Flask(__name__)                                                  ######## Code for running the model on GPU(replace this section of code)
+>>>>>>> 7d7ab77 (finalCommit)
                                                                        # Additional requirement: Torch with cuda support must be installed
 device = torch.device('cpu')                                                   #device = torch.device('cuda')
 
@@ -96,7 +105,11 @@ def seperate_faces(img_path):                  #This function seperates all the 
         output_path = os.path.join(output_dir,'{0}.jpg'.format(i))
         cv2.imwrite(output_path,face_image)
 
+<<<<<<< HEAD
 def clear_stuff():                              # This function clears all the stored images used for every prediction
+=======
+def clear_stuff():                              # This function deletes all the stored images for each prediction
+>>>>>>> 7d7ab77 (finalCommit)
     dir = 'static/Dataset/final/hello/'
     for files in os.listdir(dir):
         path = os.path.join(dir, files)
@@ -156,7 +169,11 @@ def get_output():
         img_path = "static/Dataset/Seperate/" + img.filename	
         img.save(img_path)
 
+<<<<<<< HEAD
         type = imghdr.what(img_path)                                 # checking if the file uploaded by the user is a valid image type
+=======
+        type = img_path.split(".")[-1]                                 # checking if the file uploaded by the user is a valid image type
+>>>>>>> 7d7ab77 (finalCommit)
         if (type == "png" or type == "jpg" or type == "jpeg"):
             bool = true
         else:
@@ -165,22 +182,38 @@ def get_output():
         if bool == false:
             return render_template("index.html", bool = bool)        # if not a valid file type display error message
 
+<<<<<<< HEAD
         seperate_faces(img_path)                          
         all_preds = pre_processing()                      
         l =len(all_preds)                           
+=======
+        seperate_faces(img_path)
+        all_preds = pre_processing()
+        l = len(all_preds) 
+>>>>>>> 7d7ab77 (finalCommit)
         img_paths = get_images(l)                         
         text = get_text(l,all_preds)                      
     else:
         return redirect('/');        
     
+<<<<<<< HEAD
     predictions = []            # Creating a list whose elements are themselves lists with 3 elements (image paths, predictions and path of .txt files)
+=======
+    predictions = []            # Creating a list whose elements are themselves lists with 3 elements (image paths, character and path of .txt files)
+>>>>>>> 7d7ab77 (finalCommit)
     
     for i in range(len(img_paths)): 
         temp = [img_paths[i], all_preds[i], text[i]]
         predictions.append(temp)
 
+<<<<<<< HEAD
     return render_template("index.html", predictions = predictions, l = l, img_path = img_path) # img_path is the path of parent image
     
+=======
+    
+    return render_template("index.html", predictions = predictions, l = l, img_path = img_path) # img_path is the path of parent image(image uploaded by user)
+
+>>>>>>> 7d7ab77 (finalCommit)
 @app.route("/submit2", methods = ['GET', 'POST'])
 
 def model22():
@@ -189,12 +222,24 @@ def model22():
 
     if request.method == 'POST':                                        # saving the file uploaded by the user
         img = request.files['my_image']
+<<<<<<< HEAD
         if img.filename == "":
             return redirect('/model2');
         img_path = "static/Dataset/final/hello/" + img.filename	
         img.save(img_path)
         img.save("static/Dataset/Seperate/" + img.filename)
         type = imghdr.what(img_path)                                    # checking if the file uploaded by the user is a valid image type
+=======
+
+        if img.filename == "":
+            return redirect('/model2');
+
+        img_path = "static/Dataset/Seperate/" + img.filename	
+        img.save(img_path)
+        shutil.copy(img_path, "static/Dataset/final/hello/0." + img_path.split(".")[-1])
+
+        type = img_path.split(".")[-1]                                    # checking if the file uploaded by the user is a valid image type
+>>>>>>> 7d7ab77 (finalCommit)
         if (type == "png" or type == "jpg" or type == "jpeg"):
             bool = true
         else:
@@ -216,6 +261,53 @@ def model22():
 
     return render_template("model2.html", predictions = predictions, l = 1, img_path = img_path)  # img_path is the path of parent image
 
+<<<<<<< HEAD
+=======
+@app.route("/submit-combined", methods = ['GET', 'POST'])
+            
+def get_output_combined():
+
+    clear_stuff()
+            
+    if request.method == 'POST':                                     # saving the file uploaded by the user
+        img = request.files['my_image']
+        img_copy = img
+        if img.filename == "":
+            return redirect('/');
+        img_path = "static/Dataset/Seperate/" + img.filename	
+        img.save(img_path)
+
+        type = img_path.split(".")[-1]                                 # checking if the file uploaded by the user is a valid image type
+        if (type == "png" or type == "jpg" or type == "jpeg"):
+            bool = true
+        else:
+            bool = false
+        
+        if bool == false:
+            return render_template("base.html", bool = bool)        # if not a valid file type display error message
+
+        seperate_faces(img_path)
+        all_preds = pre_processing()
+        l = len(all_preds)
+        if l == 0:                               #if no faces detected(l=0) directly give prediction on the image given by user
+            shutil.copy(img_path, "static/Dataset/final/hello/0." + img_path.split(".")[-1])
+            all_preds = pre_processing()
+            l = 1   
+        img_paths = get_images(l)                         
+        text = get_text(l,all_preds)                      
+    else:
+        return redirect('/');        
+    
+    predictions = []            # Creating a list whose elements are themselves lists with 3 elements (image paths, predictions and path of .txt files)
+    
+    for i in range(len(img_paths)): 
+        temp = [img_paths[i], all_preds[i], text[i]]
+        predictions.append(temp)
+
+    
+    return render_template("base.html", predictions = predictions, l = l, img_path = img_path) # img_path is the path of parent image
+
+>>>>>>> 7d7ab77 (finalCommit)
 @app.route("/README", methods = ['GET', 'POST'])
 
 def readme():
