@@ -84,6 +84,8 @@ Model 2 directly gives the prediction on the image given by the user (doesnt use
 This is recommended if there is only one character in the image, as the model is not only trained on the face features but overall features of the character.
 
 There is also Anime Character Main model on the home page of the app. It seperates any faces if detected. However if it fails to detect any faces in the given image ,it gives prediction based on the overall image given by the user.
+
+Small bug in the app: The app doesn't check for the file size uploaded by the user. So if the user uploads something huge the site may crash or take a lot of time.
 ### Note
 Currently the model runs on cpu, if you want to use the gpu/cuda you will have to make some changes in app.py (read the comments in app.py for the changes)
 Also you should have torch with cuda installed(your gpu must support torch with cuda). The current requirements.txt file only has torch with cpu.
