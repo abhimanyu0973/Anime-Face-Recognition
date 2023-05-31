@@ -8,8 +8,17 @@ from torchvision import models
 import os
 import shutil
 import cv2
-                                                               # Classes for our trained image classification model (Resnet34)
+import mysql.connector
+import creds
 
+db = mysql.connector.connect(                            #initialising mysql databse which has all the character details
+    host=creds.HOST,                                     #setup your own creds.py file and define required variables
+    user=creds.USERNAME,                                
+    passwd=creds.PASSWORD,
+    database=creds.DATABASE
+    )
+
+mycursor = db.cursor()                                  #initializing mysql cursor
 
 class ImageClassificationBase(nn.Module):                       # Classes for our trained image classification model (Resnet34)
     pass
@@ -128,6 +137,16 @@ def get_text(l,all_preds):                   # Returns a list containing paths o
         text.append(to_put)
     
     return text
+
+def get_text_from_db(l, all_preds):
+    details = []
+    for i in range(0,l):
+        mycursor.execute("SELECT * from Anime where name = %s", (all_preds[i],))
+
+        for x in mycursor:
+            details.append(x)
+
+    return details
 
 # routes
 
@@ -269,6 +288,20 @@ def get_output_combined():
 
 def readme():
     return render_template("README.html")
+
+@app.route("/details/<name>", methods = ['GET', 'POST'])
+
+def details(name):
+
+    mycursor.execute("SELECT * from Anime where name = %s", (name,))
+    character_details = mycursor.fetchone()
+
+    others = ()
+    mycursor.execute("SELECT name from Anime where anime = %s and name NOT IN (%s)", (character_details[1], character_details[0]))
+    for x in mycursor:
+        others = others + x
+
+    return render_template("details.html", character_details = character_details, others = others)
 
 if __name__ =='__main__':
     app.debug = True

@@ -75,7 +75,7 @@
     </br>
     {% for preds in predictions %}
         <h3>{{preds[1]}}</h3>
-        <a href = {{preds[2]}}  style = "color: blue;" target="_blank" title="Click here">Character Details</a>
+        <a href = "/details/{{preds[1]}}"  style = "color: blue;" target="_blank" title="Click here">Character Details</a>
     {% endfor %}
   {% endif %}
 
